@@ -1,0 +1,38 @@
+version: '3.9'
+services:
+  challenge_db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: kogui_user
+      POSTGRES_PASSWORD: kogui
+      POSTGRES_DB: kogui_db
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d appdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  challenge_web:
+    build: ./project
+    ports:
+      - "8000:8000"
+    depends_on:
+      challenge_db:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: challenge_db
+      POSTGRES_DB: kogui_db
+      POSTGRES_USER: kogui_user
+      POSTGRES_PASSWORD: kogui
+      POSTGRES_PORT: 5432
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./project:/app
+
+volumes:
+  pg_data:
