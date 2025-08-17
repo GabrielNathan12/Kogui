@@ -1,0 +1,28 @@
+{% extends "main/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+  <h1 class="h3 mb-4">Dashboard</h1>
+
+  <div class="row g-3">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted">Total de Leads</div>
+          <div class="display-6 fw-semibold">{{ total_leads }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <div class="text-muted">Hoje</div>
+          <div class="display-6 fw-semibold">{{ leads_today }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <a class="btn btn-primary" href="{% url 'lead-list' %}">Ver lista de leads</a>
+  </div>
+{% endblock %}

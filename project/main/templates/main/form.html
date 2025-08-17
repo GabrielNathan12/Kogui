@@ -1,0 +1,40 @@
+<!-- {% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Cadastro</title>
+        <link rel="stylesheet" href="{% static 'main/style.css' %}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+    <h1>Cadastro</h1>
+
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        <p>{{ form.name.label_tag }} {{ form.name }} {% for e in form.name.errors %}<span class="error">{{ e }}</span>{% endfor %}</p>
+        <p>{{ form.email.label_tag }} {{ form.email }} {% for e in form.email.errors %}<span class="error">{{ e }}</span>{% endfor %}</p>
+        <p>{{ form.phone.label_tag }} {{ form.phone }} {% for e in form.phone.errors %}<span class="error">{{ e }}</span>{% endfor %}</p>
+        <p>{{ form.position.label_tag }} {{ form.position }} {% for e in form.position.errors %}<span class="error">{{ e }}</span>{% endfor %}</p>
+        <p>{{ form.company_name.label_tag }} {{ form.company_name }} {% for e in form.company_name.errors %}<span class="error">{{ e }}</span>{% endfor %}</p>
+
+        <p>{{ form.segment.label_tag }} {{ form.segment }}</p>
+        <p>{{ form.company_size.label_tag }} {{ form.company_size }}</p>
+        <p>{{ form.main_interest.label_tag }} {{ form.main_interest }}</p>
+
+        <p>{{ form.follow_up.label_tag }} {{ form.follow_up }}</p>
+        <p>{{ form.observations.label_tag }} {{ form.observations }}</p>
+
+        <button type="submit">Enviar</button>
+    </form>
+    </body>
+</html> -->
