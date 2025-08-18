@@ -1,19 +1,17 @@
+import re
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from .models import Lead
 
-phone_validator = RegexValidator(
-    regex=r"^\+?\d{8,20}$",
-    message="Informe um telefone válido (somente dígitos, com DDD e opcional +DDI).",
-)
-
 class Form(forms.ModelForm):
     phone = forms.CharField(
         label="Telefone",
         max_length=20,
-        validators=[phone_validator],
-        widget=forms.TextInput(attrs={"placeholder": "+55DDDXXXXXXXXX"}),
+        widget=forms.TextInput(attrs={
+            "class": "form-control",
+            "id": "id_phone"
+        }),
     )
 
     class Meta:
@@ -23,12 +21,6 @@ class Form(forms.ModelForm):
             "segment", "company_size", "main_interest",
             "follow_up", "observations",
         ]
-        widgets = {
-            "segment": forms.Select(),
-            "company_size": forms.Select(),
-            "main_interest": forms.Select(),
-            "observations": forms.Textarea(attrs={"rows": 3}),
-        }
         labels = {
             "name": "Nome",
             "email": "E-mail",
@@ -54,9 +46,28 @@ class Form(forms.ModelForm):
             "position": {"required": "O campo cargo é obrigatório."},
             "company_name": {"required": "O campo nome da empresa é obrigatório."},
         }
+        widgets = {
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "position": forms.TextInput(attrs={"class": "form-control"}),
+            "company_name": forms.TextInput(attrs={"class": "form-control"}),
+            "segment": forms.Select(attrs={"class": "form-select"}),
+            "company_size": forms.Select(attrs={"class": "form-select"}),
+            "main_interest": forms.Select(attrs={"class": "form-select"}),
+            "follow_up": forms.TextInput(attrs={"class": "form-control"}),
+            "observations": forms.Textarea(attrs={"class": "form-control", "rows": 1}),
+        }
 
     def clean_email(self):
         email = (self.cleaned_data.get("email") or "").strip().lower()
         if Lead.objects.filter(email__iexact=email).exists():
             raise ValidationError("Este e-mail já está cadastrado.")
         return email
+    
+    def clean_phone(self):
+        raw = self.cleaned_data.get("phone", "") or ""
+        digits = re.sub(r"\D", "", raw)
+
+        if not (8 <= len(digits) <= 20):
+            raise ValidationError("Informe um telefone válido (apenas números, com DDD).")
+        return digits

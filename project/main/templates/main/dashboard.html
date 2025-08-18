@@ -1,28 +1,120 @@
 {% extends "main/base.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-  <h1 class="h3 mb-4">Dashboard</h1>
+  	<div class="d-flex flex-column align-items-start mb-3">
+    	<h1 class="h3 mb-1">Dashboard</h1>
+    	<p class="text-muted mb-0">Sistema geral de leads cadastrados no sistema.</p>
+  	</div>
 
-  <div class="row g-3">
-    <div class="col-md-3">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body">
-          <div class="text-muted">Total de Leads</div>
-          <div class="display-6 fw-semibold">{{ total_leads }}</div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body">
-          <div class="text-muted">Hoje</div>
-          <div class="display-6 fw-semibold">{{ leads_today }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  	<div class="row g-4">
+    	<div class="col-md-3">
+      		<div class="card border-0 shadow-sm">
+        		<div class="card-body d-flex justify-content-between align-items-center">
+					<div>
+					<div class="text-muted">Total de Leads</div>
+						<div class="display-6 fw-semibold">{{ total_leads }}</div>
+					</div>
+					<i class="bi bi-people-fill text-primary fs-1"></i>
+				</div>
+      		</div>
+    	</div>
 
-  <div class="mt-4">
-    <a class="btn btn-primary" href="{% url 'lead-list' %}">Ver lista de leads</a>
-  </div>
+    	<div class="col-md-3">
+			<div class="card border-0 shadow-sm">
+				<div class="card-body d-flex justify-content-between align-items-center">
+					<div>
+						<div class="text-muted">Novos</div>
+						<div class="display-6 fw-semibold">{{ leads_today }}</div>
+					</div>
+					<i class="bi bi-person-plus-fill text-success fs-1"></i>
+				</div>
+			</div>
+		</div>
+
+    	<div class="col-md-3">
+      		<div class="card border-0 shadow-sm">
+        		<div class="card-body d-flex justify-content-between align-items-center">
+					<div>
+						<div class="text-muted">Qualificados</div>
+						<div class="display-6 fw-semibold">0</div>
+					</div>
+					<i class="bi bi-check-circle-fill text-warning fs-1"></i>
+				</div>
+      		</div>
+    	</div>
+
+    	<div class="col-md-3">
+      		<div class="card border-0 shadow-sm">
+        		<div class="card-body d-flex justify-content-between align-items-center">
+					<div>
+						<div class="text-muted">Convertidos</div>
+						<div class="display-6 fw-semibold">0</div>
+					</div>
+					<i class="bi bi-graph-up-arrow fs-1" style="color: #A020F0;"></i>
+        		</div>
+      		</div>
+		</div>
+  	</div>
+	<div class="row g-4 mt-1">
+		<div class="col-lg-6">
+			<div class="card border-0 shadow-sm">
+				<div class="card-header bg-white fw-semibold">
+					Ações rápidas
+				</div>
+				<div class="card-body p-4">
+					<table class="table table-sm mb-0 align-middle">
+						<tbody>
+							<tr>
+								<td class="w-100">
+									<a href="{% url 'create_lead' %}" class="link-unstyled d-flex align-items-center">
+									<i class="bi bi-person-plus-fill me-4"></i>
+										Cadastrar Novo lead
+									</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="w-100">
+									<a href="{% url 'lead_list' %}" class="link-unstyled d-flex align-items-center">
+									<i class="bi bi-eye-fill me-4"></i>
+										Ver Todos os Leads
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-lg-6">
+			<div class="card border-0 shadow-sm">
+				<div class="card-header bg-white fw-semibold d-flex align-items-center">
+					<span>Leads recentes</span>
+				</div>
+				<div class="card-body p-4">
+					<table class="table table-sm mb-0 align-middle">
+						<thead class="table-light">
+							<tr>
+								<th>Nome</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for lead in recent_leads %}
+								<tr>
+									<td>{{ lead.name }}</td>
+									<td class="text-end">Status</td>
+								</tr>
+							{% empty %}
+								<tr>
+									<td colspan="3" class="text-center text-muted">Nenhum lead recente.</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
 {% endblock %}

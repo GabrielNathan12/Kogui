@@ -1,21 +1,22 @@
 {% load static %}
 <nav class="navbar bg-white border-bottom">
-  <div class="container">
-    <div class="d-flex align-items-center justify-content-start gap-3">
-      <a href="/" class="fw-bold text-dark text-decoration-none m-0 p-0">
-        Sistema de Leads
-      </a>
+  	<div class="container">
+   	<div class="d-flex align-items-center justify-content-start gap-3">
+      	<a href="/" class="fw-bold text-dark text-decoration-none m-0 p-0">
+       		Sistema de Leads
+      	</a>
 
-      <a href="{% url 'dashboard' %}"
-         class="nav-item-link {% if request.resolver_match.url_name == 'dashboard' %}active-box{% endif %}">
-        <i class="bi bi-bar-chart me-1"></i> Dashboard
-      </a>
-      <a href="#" class="text-dark text-decoration-none p-0">
-        <i class="bi bi-person-add me-1"></i> Cadastro
-      </a>
-      <a href="#" class="text-dark text-decoration-none p-0">
-         <i class="bi bi-list-ul me-1"></i>  Lista de Leads
-      </a>
-    </div>
-  </div>
+      	<a href="{% url 'dashboard' %}"
+         	class="nav-item-link {% if request.resolver_match.url_name == 'dashboard' %}active-box{% endif %}">
+        	<i class="bi bi-bar-chart me-1"></i> Dashboard
+      	</a>
+      	<a href="{% url 'create_lead' %}" class="nav-item-link {% if request.resolver_match.url_name == 'create_lead' %} active-box {% endif %}">
+       		<i class="bi bi-person-add me-1"></i> Cadastro
+      	</a>
+      	<a href="{% url 'lead_list' %}" 
+				class="nav-item-link {% if request.resolver_match.url_name == 'lead_list' %} active-box {% endif %}">
+         	<i class="bi bi-list-ul me-1"></i> Lista de Leads
+      	</a>
+    	</div>
+  	</div>
 </nav>

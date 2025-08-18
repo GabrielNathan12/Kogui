@@ -1,37 +1,149 @@
-{% extends "base.html" %}
+{% extends "main/base.html" %}
 {% block title %}Leads{% endblock %}
 {% block content %}
-  <div class="d-flex align-items-center mb-3">
-    <h1 class="h3 m-0">Leads</h1>
-    <a href="{% url 'home' %}" class="btn btn-sm btn-primary ms-auto">Novo Lead</a>
-  </div>
+	<div class="d-flex flex-column align-items-start mb-3">
+		<h1 class="h3 mb-1">Leads</h1>
+		<p class="text-muted mb-0">Aqui você encontra todos os leads cadastrados no sistema.</p>
+	</div>
 
-  <div class="table-responsive">
-    <table class="table table-sm table-striped align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>Nome</th>
-          <th>E-mail</th>
-          <th>Telefone</th>
-          <th>Empresa</th>
-          <th>Cargo</th>
-          <th>Criado em</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for lead in leads %}
-          <tr>
-            <td>{{ lead.name }}</td>
-            <td>{{ lead.email }}</td>
-            <td>{{ lead.phone }}</td>
-            <td>{{ lead.company_name }}</td>
-            <td>{{ lead.position }}</td>
-            <td>{{ lead.created_at|date:"d/m/Y H:i" }}</td>
-          </tr>
-        {% empty %}
-          <tr><td colspan="6" class="text-center text-muted">Nenhum lead cadastrado.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+	<form method="get" action="{% url 'lead_list' %}" class="mb-3">
+		<div class="input-group">
+			<span class="input-group-text bg-white">
+				<i class="bi bi-search"></i>
+			</span>
+			<input type="text" name="keyword" id="keyword" class="form-control"
+				placeholder="Busque por nome, empresa ou e-mail..." value="{{ query }}">
+			<a href="{% url 'create_lead' %}" class="btn ms-2" style="background-color: green; color: aliceblue;">
+				<i class="bi bi-person-plus-fill me-2"></i>
+				Novo Lead
+			</a>
+		</div>
+	</form>
+
+
+  	<div class="table-responsive">
+		<table class="table table-sm table-striped align-middle">
+			<thead class="table-light">
+				<tr>
+					<th>Nome</th>
+						<th>Empresa</th>
+						<th>E-mail</th>
+						<th>Telefone</th>
+						<th>Status</th>
+						<th>Data</th>
+						<th class="text-center">Ações</th>
+					</tr>
+			</thead>
+			<tbody>
+				{% for lead in leads %}
+					<tr>
+						<td>{{ lead.name }}</td>
+						<td>{{ lead.company_name }}</td>
+						<td>{{ lead.email }}</td>
+						<td id="id_phone">{{ lead.phone }}</td>
+						<td> Status </td>
+						<td>{{ lead.created_at|date:"d/m/Y" }}</td>
+						<td colspan="3" class="text-center text-muted">
+							<a href="#" data-bs-toggle="modal" data-bs-target="#leadModal{{ lead.id }}">
+								<i class="bi bi-eye-fill me-2"></i>
+							</a>
+							<i class="bi bi-pencil-square me-2"></i>
+							<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ lead.id }}">
+								<i class="bi bi-trash3-fill text-danger"></i>
+							</a>
+						</td>
+					</tr>
+					<div class="modal fade" id="leadModal{{ lead.id }}" tabindex="-1" aria-labelledby="leadModalLabel{{ lead.id }}" aria-hidden="true">
+						<div class="modal-dialog modal-lg modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="leadModalLabel{{ lead.id }}">
+										Detalhes do Lead - {{ lead.name }}
+									</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+								</div>
+								<div class="modal-body">
+									<p><strong>Nome:</strong> {{ lead.name }}</p>
+									<p><strong>Email:</strong> {{ lead.email }}</p>
+									<p><strong>Telefone:</strong> {{ lead.phone }}</p>
+									<p><strong>Cargo:</strong> {{ lead.position }}</p>
+									<p><strong>Empresa:</strong> {{ lead.company_name }}</p>
+									<p><strong>Segmento:</strong> {{ lead.get_segment_display }}</p>
+									<p><strong>Tamanho da empresa:</strong> {{ lead.get_company_size_display }}</p>
+									<p><strong>Interesse principal:</strong> {{ lead.get_main_interest_display }}</p>
+									<p><strong>Observações:</strong> {{ lead.observations|default:"-" }}</p>
+									<p><strong>Data de cadastro:</strong> {{ lead.created_at|date:"d/m/Y H:i" }}</p>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal fade" id="deleteModal{{ lead.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ lead.id }}" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="deleteModalLabel{{ lead.id }}">
+										Confirmar Exclusão
+									</h5>
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+								</div>
+								<div class="modal-body">
+									Tem certeza que deseja excluir o lead <strong>{{ lead.name }}</strong> ({{ lead.email }})?  
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+									<form method="post" action="{% url 'delete_lead' lead.id %}">
+										{% csrf_token %}
+										<button type="submit" class="btn btn-danger">
+											<i class="bi bi-trash3-fill me-1"></i> Excluir
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+					{% empty %}
+						<tr><td colspan="6" class="text-center text-muted">Nenhum lead cadastrado.</td></tr>
+					{% endfor %}
+			</tbody>
+		</table>
+		<div class="d-flex justify-content-end">
+			<nav aria-label="Paginação de leads">
+				<ul class="pagination pagination-sm mb-0">
+					{% if page_obj.has_previous %}
+						<li class="page-item">
+							<a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&keyword={{ query }}{% endif %}">&laquo;</a>
+						</li>
+					{% else %}
+						<li class="page-item disabled">
+							<span class="page-link">&laquo;</span>
+						</li>
+      				{% endif %}
+
+					{% for num in page_obj.paginator.page_range %}
+						{% if page_obj.number == num %}
+							<li class="page-item active"><span class="page-link">{{ num }}</span></li>
+        				{% else %}
+							<li class="page-item">
+								<a class="page-link" href="?page={{ num }}{% if query %}&keyword={{ query }}{% endif %}">{{ num }}</a>
+							</li>
+        				{% endif %}
+      				{% endfor %}
+
+					{% if page_obj.has_next %}
+						<li class="page-item">
+							<a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&keyword={{ query }}{% endif %}">&raquo;</a>
+						</li>
+					{% else %}
+						<li class="page-item disabled">
+							<span class="page-link">&raquo;</span>
+						</li>
+					{% endif %}
+    			</ul>
+  			</nav>
+		</div>
+	</div>
 {% endblock %}

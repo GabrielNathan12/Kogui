@@ -1,40 +1,92 @@
-<!-- {% load static %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Cadastro</title>
-        <link rel="stylesheet" href="{% static 'main/style.css' %}">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>
-    <h1>Cadastro</h1>
+{% extends "main/base.html" %}
+{% block title %}Cadastro{% endblock %}
+{% block content %}
+	<div class="d-flex flex-column justify-content-center align-items-center mb-3">
+		<h1 class="h3 mb-1">Cadastro de Lead</h1>
+		<p class="text-muted mb-0">Adicione um novo Lead no sistema.</p>
+	</div>
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="card shadow-sm w-50">
+            <div class="card-body">
+                <h5 class="h6 mb-1">Informações do Lead</h5>
+                <p class="text-muted mb-2">Preencha os dados do Lead para adicionar ao sistema.</p>
 
-    {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-            <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.name.label }}</label>
+                                {{ form.name }}
+                                {% for e in form.name.errors %}
+                                    <div class="text-danger small">
+                                        {{ e }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.email.label }}</label>
+                                {{ form.email }}
+                                {% for e in form.email.errors %}
+                                    <div class="text-danger small">
+                                        {{ e }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.phone.label }}</label>
+                                {{ form.phone }}
+                                {% for e in form.phone.errors %}
+                                    <div class="text-danger small">
+                                        {{ e }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.position.label }}</label>
+                                {{ form.position }}
+                                {% for e in form.position.errors %}
+                                    <div class="text-danger small">
+                                        {{ e }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">{{ form.company_name.label }}</label>
+                                {{ form.company_name }}
+                                {% for e in form.company_name.errors %}
+                                    <div class="text-danger small">
+                                        {{ e }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.segment.label }}</label>
+                                {{ form.segment }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">{{ form.company_size.label }}</label>
+                                {{ form.company_size }}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">{{ form.main_interest.label }}</label>
+                                {{ form.main_interest }}
+                            </div>
+                        <div class="col-12">
+                            <label class="form-label">{{ form.observations.label }}</label>
+                            {{ form.observations }}
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center gap-3 mt-4" style="max-width: 500px; margin: auto;">
+                        <button type="submit" class="btn flex-grow-1" style="background-color: green; color: aliceblue;">
+                            <i class="bi bi-person-plus-fill me-1"></i>
+                            Cadastrar Lead
+                        </button>
+                        <button type="reset" class="btn btn-outline-secondary">Limpar</button>
+                    </div>
 
-    <form method="post" novalidate>
-        {% csrf_token %}
+                </form>
+            </div>
+        </div>
+    </div>
 
-        <p>{{ form.name.label_tag }} {{ form.name }} {% for e in form.name.errors %}<span class="error">{{ e }}</span>{% endfor %}</p>
-        <p>{{ form.email.label_tag }} {{ form.email }} {% for e in form.email.errors %}<span class="error">{{ e }}</span>{% endfor %}</p>
-        <p>{{ form.phone.label_tag }} {{ form.phone }} {% for e in form.phone.errors %}<span class="error">{{ e }}</span>{% endfor %}</p>
-        <p>{{ form.position.label_tag }} {{ form.position }} {% for e in form.position.errors %}<span class="error">{{ e }}</span>{% endfor %}</p>
-        <p>{{ form.company_name.label_tag }} {{ form.company_name }} {% for e in form.company_name.errors %}<span class="error">{{ e }}</span>{% endfor %}</p>
-
-        <p>{{ form.segment.label_tag }} {{ form.segment }}</p>
-        <p>{{ form.company_size.label_tag }} {{ form.company_size }}</p>
-        <p>{{ form.main_interest.label_tag }} {{ form.main_interest }}</p>
-
-        <p>{{ form.follow_up.label_tag }} {{ form.follow_up }}</p>
-        <p>{{ form.observations.label_tag }} {{ form.observations }}</p>
-
-        <button type="submit">Enviar</button>
-    </form>
-    </body>
-</html> -->
+{% endblock %}

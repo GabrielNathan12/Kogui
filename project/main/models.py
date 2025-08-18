@@ -28,6 +28,13 @@ class Lead(models.Model):
         ("outros", "Outros"),
     ]
     
+    STATUS_CHOICE_LEADS = [
+        ("ativo", "Ativo"),
+        ("contratado", "Contratado"),
+        ("qualificado", "Qualificado"),
+        ("desqualificado", "Desqualificado"),
+    ]
+    
     name = models.CharField("Nome", max_length=100)
     email = models.EmailField("E-mail", unique=True)
     phone = models.CharField("Telefone", max_length=20, default="")

@@ -1,9 +1,9 @@
 from django.urls import path
-from .views import home, success, dashboard, lead_list
+from .views import create_lead, success, dashboard, lead_list, delete_lead
 
 urlpatterns = [
     path("", dashboard, name="dashboard"),
-    path("leads/", lead_list, name="lead-list"),
-    path('success/', success, name='success'),
-
+    path("create-lead/", create_lead, name='create_lead'),
+    path("delete-lead/<int:pk>", delete_lead, name="delete_lead"),
+    path("leads/", lead_list, name="lead_list"),
 ]

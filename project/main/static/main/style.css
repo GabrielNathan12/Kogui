@@ -1,6 +1,9 @@
 body { 
-    background-color: #f7f8fa; }
-    .navbar-brand img { filter: brightness(1.2);
+  background-color: #f7f8fa;
+}
+
+.navbar-brand img { 
+    filter: brightness(1.2);
 }
 
 .messages .alert { 
@@ -18,13 +21,14 @@ body {
 .nav-item-link {
   text-decoration: none;
   color: #333;
-  padding: 6px 12px;
+  padding: 2px 5px;
   border-radius: 6px;
   transition: all 0.2s ease-in-out;
 }
 
 .nav-item-link:hover {
-  background-color: #09580f;
+  background-color: green;
+    color: rgb(250, 250, 250) !important;
 }
 
 .active-box {
@@ -33,4 +37,13 @@ body {
   font-weight: bold;
   color: rgb(250, 250, 250) !important;
   background-color:  green;
+}
+
+.link-unstyled {
+  color: #333;
+  text-decoration: none;
+}
+
+.link-unstyled:hover {
+  color: green;
 }
