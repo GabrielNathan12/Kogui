@@ -35,81 +35,172 @@
 					</tr>
 			</thead>
 			<tbody>
-				{% for lead in leads %}
-					<tr>
-						<td>{{ lead.name }}</td>
-						<td>{{ lead.company_name }}</td>
-						<td>{{ lead.email }}</td>
-						<td id="id_phone">{{ lead.phone }}</td>
-						<td> Status </td>
-						<td>{{ lead.created_at|date:"d/m/Y" }}</td>
-						<td colspan="3" class="text-center text-muted">
-							<a href="#" data-bs-toggle="modal" data-bs-target="#leadModal{{ lead.id }}">
-								<i class="bi bi-eye-fill me-2"></i>
-							</a>
-							<i class="bi bi-pencil-square me-2"></i>
-							<a href="#" data-bs-toggle="modal" data-bs-target="#deleteModal{{ lead.id }}">
-								<i class="bi bi-trash3-fill text-danger"></i>
-							</a>
-						</td>
-					</tr>
-					<div class="modal fade" id="leadModal{{ lead.id }}" tabindex="-1" aria-labelledby="leadModalLabel{{ lead.id }}" aria-hidden="true">
-						<div class="modal-dialog modal-lg modal-dialog-centered">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="leadModalLabel{{ lead.id }}">
-										Detalhes do Lead - {{ lead.name }}
-									</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-								</div>
-								<div class="modal-body">
-									<p><strong>Nome:</strong> {{ lead.name }}</p>
-									<p><strong>Email:</strong> {{ lead.email }}</p>
-									<p><strong>Telefone:</strong> {{ lead.phone }}</p>
-									<p><strong>Cargo:</strong> {{ lead.position }}</p>
-									<p><strong>Empresa:</strong> {{ lead.company_name }}</p>
-									<p><strong>Segmento:</strong> {{ lead.get_segment_display }}</p>
-									<p><strong>Tamanho da empresa:</strong> {{ lead.get_company_size_display }}</p>
-									<p><strong>Interesse principal:</strong> {{ lead.get_main_interest_display }}</p>
-									<p><strong>Observações:</strong> {{ lead.observations|default:"-" }}</p>
-									<p><strong>Data de cadastro:</strong> {{ lead.created_at|date:"d/m/Y H:i" }}</p>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+				{% for row in rows %}
+        			{% with lead=row.lead form=row.form %}
+						<tr>
+							<td>{{ lead.name }}</td>
+							<td>{{ lead.company_name }}</td>
+							<td>{{ lead.email }}</td>
+							<td id="id_phone">{{ lead.phone }}</td>
+							<td> Status </td>
+							<td>{{ lead.created_at|date:"d/m/Y" }}</td>
+							<td colspan="3" class="text-center text-muted">
+								<a href="#" data-bs-toggle="modal" class="link-unstyled text-primary" data-bs-target="#leadModal{{ lead.id }}">
+									<i class="bi bi-eye-fill me-2"></i>
+								</a>
+								<a href="#" data-bs-toggle="modal" class="link-unstyled text-secondary" data-bs-target="#editModal{{ lead.id }}">
+									<i class="bi bi-pencil-square me-2"></i>
+								</a>
+								<a href="#" data-bs-toggle="modal" class="link-unstyled text-danger" data-bs-target="#deleteModal{{ lead.id }}">
+									<i class="bi bi-trash3-fill me-2"></i>
+								</a>
+							</td>
+						</tr>
+
+						<div class="modal fade" id="leadModal{{ lead.id }}" tabindex="-1" aria-labelledby="leadModalLabel{{ lead.id }}" aria-hidden="true">
+							<div class="modal-dialog modal-lg modal-dialog-centered">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="leadModalLabel{{ lead.id }}">
+											Detalhes do Lead - {{ lead.name }}
+										</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+									</div>
+									<div class="modal-body">
+										<p><strong>Nome:</strong> {{ lead.name }}</p>
+										<p><strong>Email:</strong> {{ lead.email }}</p>
+										<p id="id_phone"><strong>Telefone:</strong> {{ lead.phone }}</p>
+										<p><strong>Cargo:</strong> {{ lead.position }}</p>
+										<p><strong>Empresa:</strong> {{ lead.company_name }}</p>
+										<p><strong>Segmento:</strong> {{ lead.get_segment_display }}</p>
+										<p><strong>Tamanho da empresa:</strong> {{ lead.get_company_size_display }}</p>
+										<p><strong>Interesse principal:</strong> {{ lead.get_main_interest_display }}</p>
+										<p><strong>Observações:</strong> {{ lead.observations|default:"-" }}</p>
+										<p><strong>Data de cadastro:</strong> {{ lead.created_at|date:"d/m/Y H:i" }}</p>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="modal fade" id="deleteModal{{ lead.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ lead.id }}" aria-hidden="true">
-						<div class="modal-dialog modal-dialog-centered">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="deleteModalLabel{{ lead.id }}">
-										Confirmar Exclusão
-									</h5>
-									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-								</div>
-								<div class="modal-body">
-									Tem certeza que deseja excluir o lead <strong>{{ lead.name }}</strong> ({{ lead.email }})?  
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-									<form method="post" action="{% url 'delete_lead' lead.id %}">
+						<div class="modal fade" id="editModal{{ lead.id }}" tabindex="-1" aria-labelledby="editModalLabel{{ lead.id }}" aria-hidden="true">
+							<div class="modal-dialog modal-lg modal-dialog-centered">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="editModalLabel{{ lead.id }}">Editar Lead: {{ lead.name }}</h5>
+										<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+									</div>
+									<form method="POST" action="{% url 'edit_lead' lead.id %}" novalidate>
 										{% csrf_token %}
-										<button type="submit" class="btn btn-danger">
-											<i class="bi bi-trash3-fill me-1"></i> Excluir
-										</button>
+										<div class="modal-body">
+											<div class="row g-3">
+												<div class="col-md-6">
+													<label class="form-label">{{ form.name.label }}</label>
+													{{ form.name }}
+													{% for e in form.name.errors %}
+														<div class="text-danger small">
+															{{ e }}
+														</div>
+													{% endfor %}
+												</div>
+												<div class="col-md-6">
+													<label class="form-label">{{ form.email.label }}</label>
+													{{ form.email }}
+													{% for e in form.email.errors %}
+														<div class="text-danger small">
+															{{ e }}
+														</div>
+													{% endfor %}
+												</div>
+												<div class="col-md-6">
+													<label class="form-label">{{ form.phone.label }}</label>
+													{{ form.phone }}
+													{% for e in form.phone.errors %}
+														<div class="text-danger small">
+															{{ e }}
+														</div>
+													{% endfor %}
+												</div>
+												<div class="col-md-6">
+													<label class="form-label">{{ form.position.label }}</label>
+													{{ form.position }}
+													{% for e in form.position.errors %}
+														<div class="text-danger small">
+															{{ e }}
+														</div>
+													{% endfor %}
+												</div>
+												<div class="col-12">
+													<label class="form-label">{{ form.company_name.label }}</label>
+													{{ form.company_name }}
+													{% for e in form.company_name.errors %}
+														<div class="text-danger small">
+															{{ e }}
+														</div>
+													{% endfor %}
+												</div>
+												<div class="col-md-6">
+													<label class="form-label">{{ form.segment.label }}</label>
+													{{ form.segment }}
+												</div>
+												<div class="col-md-6">
+													<label class="form-label">{{ form.company_size.label }}</label>
+													{{ form.company_size }}
+												</div>
+												<div class="col-12">
+													<label class="form-label">{{ form.main_interest.label }}</label>
+													{{ form.main_interest }}
+												</div>
+												<div class="col-12">
+													<label class="form-label">{{ form.observations.label }}</label>
+													{{ form.observations }}
+												</div>
+											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+											<button type="submit" class="btn btn-primary">
+												<i class="bi bi-check-lg me-1"></i> Salvar alterações
+											</button>
+										</div>
 									</form>
 								</div>
 							</div>
 						</div>
-					</div>
-					{% empty %}
-						<tr><td colspan="6" class="text-center text-muted">Nenhum lead cadastrado.</td></tr>
-					{% endfor %}
+
+						<div class="modal fade" id="deleteModal{{ lead.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ lead.id }}" aria-hidden="true">
+							<div class="modal-dialog modal-dialog-centered">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="deleteModalLabel{{ lead.id }}">
+											Confirmar Exclusão
+										</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+									</div>
+									<div class="modal-body">
+										Tem certeza que deseja excluir o lead <strong>{{ lead.name }}</strong> ({{ lead.email }})?  
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+										<form method="post" action="{% url 'delete_lead' lead.id %}">
+											{% csrf_token %}
+											<button type="submit" class="btn btn-danger">
+												<i class="bi bi-trash3-fill me-1"></i> Excluir
+											</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endwith %}
+				{% empty %}
+					<tr><td colspan="6" class="text-center text-muted">Nenhum lead cadastrado.</td></tr>
+				{% endfor %}
 			</tbody>
 		</table>
+
 		<div class="d-flex justify-content-end">
 			<nav aria-label="Paginação de leads">
 				<ul class="pagination pagination-sm mb-0">

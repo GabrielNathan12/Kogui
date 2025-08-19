@@ -33,6 +33,7 @@ class Lead(models.Model):
         ("contratado", "Contratado"),
         ("qualificado", "Qualificado"),
         ("desqualificado", "Desqualificado"),
+        ("nao_avaliado", "Não Avaliado")
     ]
     
     name = models.CharField("Nome", max_length=100)
@@ -46,6 +47,7 @@ class Lead(models.Model):
     main_interest = models.CharField("Principal interesse", max_length=12, choices=MAIN_INTEREST_CHOICES, blank=True)
     follow_up = models.CharField("Como soube/Follow-up", max_length=200, blank=True)
     observations = models.TextField("Observações", blank=True)
+    status = models.CharField("Status",  max_length=20, choices=STATUS_CHOICE_LEADS, blank=True, default="nao_avaliado")
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

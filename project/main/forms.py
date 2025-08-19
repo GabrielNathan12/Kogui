@@ -60,14 +60,17 @@ class Form(forms.ModelForm):
 
     def clean_email(self):
         email = (self.cleaned_data.get("email") or "").strip().lower()
-        if Lead.objects.filter(email__iexact=email).exists():
+        qs = Lead.objects.filter(email__iexact=email)
+        if self.instance and self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
             raise ValidationError("Este e-mail já está cadastrado.")
         return email
+
     
     def clean_phone(self):
         raw = self.cleaned_data.get("phone", "") or ""
         digits = re.sub(r"\D", "", raw)
-
         if not (8 <= len(digits) <= 20):
             raise ValidationError("Informe um telefone válido (apenas números, com DDD).")
         return digits
